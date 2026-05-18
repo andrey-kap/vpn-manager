@@ -1,52 +1,34 @@
 ```
-# Dependencies
-node_modules/
-
-# Build outputs
+# Build artifacts and compiled files
+*.d.ts
+*.d.ts.map
+*.js
+*.js.map
 dist/
 build/
-coverage/
-htmlcov/
+target/
 
-# Environment variables
-.env
-.env.local
-*.env.*
-
-# Python cache
-__pycache__/
-*.pyc
-*.pyo
-*.pyd
-
-# Logs
-*.log
-
-# IDE files
-.vscode/
-.idea/
-*.swp
-*.swo
-*.tmp
-
-# OS files
-.DS_Store
-Thumbs.db
-
-# Testing
-.mypy_cache/
-.pytest_cache/
-.coverage
-
-# Node.js
+# Dependencies
+node_modules/
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 
-# Compiled JavaScript
-*.min.js
-*.bundle.js
+# Environment variables
+.env
+.env.local
+.env.*
 
-# TypeScript
-*.tsbuildinfo
+# IDE specific
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Logs
+*.log
+
+# Coverage
+coverage/
+.nyc_output/
 ```
