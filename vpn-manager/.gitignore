@@ -7,3 +7,10 @@ dist/
 coverage/
 .vscode/
 .idea/
+
+# Docker volumes
+data/
+strongswan-config/
+
+# Build artifacts
+build/

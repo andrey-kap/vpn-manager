@@ -1,0 +1,93 @@
+services:
+  # ==================== API Service ====================
+  api:
+    build:
+      context: ./server
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+    volumes:
+      # SQLite database persistence
+      - ./data:/app/data
+      # StrongSwan configuration persistence
+      - strongswan-config:/etc/strongswan
+      # Docker socket for container management (optional, comment out if not needed)
+      - /var/run/docker.sock:/var/run/docker.sock
+    env_file:
+      - .env
+    environment:
+      - NODE_ENV=production
+      - PORT=3000
+      - DB_PATH=/app/data/sqlite.db
+      - DOCKER_SOCKET_PATH=/var/run/docker.sock
+    networks:
+      - vpn-net
+    depends_on: []
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    restart: unless-stopped
+
+  # ==================== Web Service ====================
+  # Option A: Dedicated nginx container for static files
+  web:
+    build:
+      context: ./web
+      dockerfile: Dockerfile
+    ports:
+      - "80:80"
+    environment:
+      - VITE_API_URL=http://localhost:3000
+    networks:
+      - vpn-net
+    depends_on:
+      - api
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:80/"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
+    restart: unless-stopped
+
+  # ==================== Alternative: Static via Backend ====================
+  # Option B: Comment out 'web' service above and uncomment below
+  # to serve frontend static files through @fastify/static on backend
+  # In this case, backend serves both API and frontend on port 3000
+  #
+  # web-via-api:
+  #   build:
+  #     context: ./server
+  #     dockerfile: Dockerfile
+  #   ports:
+  #     - "3000:3000"
+  #   volumes:
+  #     - ./data:/app/data
+  #     - strongswan-config:/etc/strongswan
+  #     - /var/run/docker.sock:/var/run/docker.sock
+  #   env_file:
+  #     - .env
+  #   environment:
+  #     - NODE_ENV=production
+  #     - PORT=3000
+  #   networks:
+  #     - vpn-net
+  #   healthcheck:
+  #     test: ["CMD", "curl", "-f", "http://localhost:3000/health"]
+  #     interval: 30s
+  #     timeout: 10s
+  #     retries: 3
+  #   restart: unless-stopped
+
+networks:
+  vpn-net:
+    driver: bridge
+    name: vpn-manager-network
+
+volumes:
+  strongswan-config:
+    name: vpn-manager-strongswan-config
+    driver: local
