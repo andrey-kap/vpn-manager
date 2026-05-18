@@ -20,8 +20,7 @@
   },
   "include": [
     "shared/**/*",
-    "server/**/*",
-    "web/**/*"
+    "server/**/*"
   ],
   "exclude": [
     "node_modules",
