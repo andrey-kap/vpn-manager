@@ -1,0 +1,38 @@
+```
+# Dependencies
+node_modules/
+server/node_modules/
+web/node_modules/
+
+# Build outputs
+dist/
+build/
+server/dist/
+web/dist/
+
+# TypeScript cache
+*.tsbuildinfo
+**/*.tsbuildinfo
+
+# Environment variables
+.env
+.env.local
+.env.*
+
+# IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Logs
+*.log
+
+# Temporary files
+*.tmp
+*.temp
+
+# Coverage
+coverage/
+.nyc_output/
+```
